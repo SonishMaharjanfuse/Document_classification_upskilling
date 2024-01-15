@@ -1,0 +1,11 @@
+# Ignore .keras files
+*.keras
+
+# Ignore .pt files
+*.pt
+
+# Ignore .zip files
+*.zip
+
+# Ignore specific file
+events.out.tfevents.1705056054.9482ebb11869.3086
