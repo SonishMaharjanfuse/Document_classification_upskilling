@@ -57,5 +57,3 @@ We trained the data using the YOLO, VGG16, VGG19, Resnet50 and custom CNN model.
 ### Models
 
 The model are available <a href='https://drive.google.com/file/d/178aHLpM_sxy_KZsvEBnidT-zFZwV173W/view?usp=sharing'> here </a>.
-
-
