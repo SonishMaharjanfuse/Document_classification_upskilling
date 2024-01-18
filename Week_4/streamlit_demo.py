@@ -41,7 +41,7 @@ def yolo_predict():
         )
         results = model.predict(image_array)
         name_dic = results[0].names
-        key = np.argmax(results[0].probs.data).item()
+        key = np.argmax(results[0].probs.data.cpu()).item()
         st.subheader("Prediction:")
         st.write("Prediction class:", name_dic[key])
 
