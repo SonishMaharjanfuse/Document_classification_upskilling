@@ -60,6 +60,17 @@ def augment_data(dataset_path):
         warped_image = cv2.warpPerspective(
             brightened_image, matrix, (cols, rows))
 
+        mean = 0
+        std = 25
+        row, col, ch = original_image.shape
+        gauss = np.random.normal(mean, std, (row, col, ch))
+
+        # Add the noise to the image
+        noisy = original_image + gauss
+
+        # Ensure pixel values are within the valid range [0, 255]
+        noisy = np.clip(noisy, 0, 255).astype(np.uint8)
+
         # Save augmented images
         cv2.imwrite(os.path.join(
             output_path, f"rotated__{image_file}"), rotated_image)
@@ -73,6 +84,7 @@ def augment_data(dataset_path):
             output_path, f"brightened__{image_file}"), brightened_image)
         cv2.imwrite(os.path.join(
             output_path, f"warped__{image_file}"), warped_image)
+        cv2.imwrite(os.path.join(output_path, f"noisy__{image_file}"), noisy)
 
 
 def reaugment_data(output_path):
@@ -138,8 +150,8 @@ def main():
     """
     Main function to demonstrate image augmentation and re-augmentation.
     """
-    dataset_path = "./data/"
-    output_path = "./augmented_data/"
+    dataset_path = "./Week_2/data1/"
+    output_path = "./Week_2/augmented_data/"
     os.makedirs(output_path, exist_ok=True)
 
     augment_data(dataset_path)

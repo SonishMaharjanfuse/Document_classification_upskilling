@@ -84,6 +84,9 @@ def vgg_predict():
 
 
 def main():
+    """
+    Main function to run the streamlit app.
+    """
     options = st.sidebar.radio("Choose the model", ["Home", "YOLO", "VGG"])
 
     if options == "YOLO":
