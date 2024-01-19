@@ -12,3 +12,7 @@ events.out.tfevents.1705056054.9482ebb11869.3086
 
 # Ignore precommit-config.yml
 *config.yml
+
+# Ignore caches
+__pycache__/
+.cache/

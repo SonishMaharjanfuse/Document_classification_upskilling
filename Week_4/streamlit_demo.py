@@ -2,6 +2,7 @@ import streamlit as st
 from ultralytics import YOLO
 import numpy as np
 import cv2
+import os
 from PIL import Image
 from tensorflow.keras.models import load_model
 
@@ -87,7 +88,8 @@ def main():
     """
     Main function to run the streamlit app.
     """
-    options = st.sidebar.radio("Choose the model", ["Home", "YOLO", "VGG"])
+    options = st.sidebar.radio(
+        "Choose the model", ["Home", "YOLO", "VGG", "Augmentation"])
 
     if options == "YOLO":
         yolo_options = st.sidebar.radio(
@@ -132,6 +134,29 @@ def main():
             The application of document classification is significant in automating administrative processes, identity verification, and information retrieval systems. It streamlines the categorization of diverse documents, contributing to more efficient document management workflows, and is particularly relevant in industries where compliance and security play critical roles. Overall, document classification serves as a valuable tool for organizing and handling large volumes of documents with diverse content and purposes.
             """
         )
+
+    if options == "Augmentation":
+        # os.syste/m("rm -rf ./Week2/data1/")
+        uploaded_file = upload_image()
+        output_path = "./Week_2/data1/"
+        os.makedirs(output_path, exist_ok=True)
+
+        if uploaded_file is not None:
+            cv2_image = np.array(uploaded_file)
+
+            cv2.imwrite(os.path.join(
+                output_path, "test.jpg"), cv2_image)
+
+            os.system("python3 ./Week_2/Data_augmentation.py")
+
+            augmented_path = "./Week_2/augmented_data"
+            image_files = [f for f in os.listdir(
+                augmented_path) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
+            for image_file in image_files:
+                image = f"{augmented_path}/{image_file}"
+                st.image(image, caption=image_file, use_column_width=False)
+
+            os.system(f"rm -rf {augmented_path} {output_path} ")
 
 
 if __name__ == "__main__":
