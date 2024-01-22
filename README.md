@@ -12,7 +12,7 @@ For the document classification, we collected images for each class (passport, c
 
 ## Data Augmentation
 
-As the dataset that was collected was too small, we must augment the data for the training purpose. Augmentation is the process of increasing the data by applying different image processing techniques in the currently available data. By performing the task like rotating, adding noise, up-scaling, down-scaling, lightening, wrapping and so on the data is being augmented.  We perform augmentation and prepare data set about 3625 for training and 1234 for validation set. The data are used for preparing the model.
+As the dataset that was collected was too small, we must augment the data for the training purpose. Augmentation is the process of increasing the data by applying different image processing techniques in the currently available data. By performing the task like rotating, adding noise, up-scaling, down-scaling, lightening, wrapping and so on the data is being augmented.  We perform augmentation and prepare data set about 3625 for training and 1234 for test set. The data are used for preparing the model. The seperate 63 images of the classes were collected for validation set.
 
 # Week 3
 
@@ -57,3 +57,12 @@ We trained the data using the YOLO, VGG16, VGG19, Resnet50 and custom CNN model.
 ### Models
 
 The model are available <a href='https://drive.google.com/file/d/178aHLpM_sxy_KZsvEBnidT-zFZwV173W/view?usp=sharing'> here </a>.
+
+# Week 4
+
+In week 4, we created the streamlit app for the document classification. For document classification we used 2 model. We created the different pages for selection of the model for document classification.
+
+We also created the container and push it to the docker hub. The docker file can be pulled using following code:
+```bash
+docker pull sonishmaharjan555/document_classifier:v1.4
+```
