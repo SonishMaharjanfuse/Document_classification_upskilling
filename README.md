@@ -19,6 +19,7 @@ As the dataset that was collected was too small, we must augment the data for th
 ## Training Model
 
 We trained the data using the YOLO, VGG16, VGG19, Resnet50 and custom CNN model. All the are models constructed using convolution neural networks. The skip connection is present in the resnet so it is called residual network. VGG16 and VGG19  contain 16 and 19 neural networks respectively. After training the model the VGG model performed far better than resnet model. In about 5-10 epochs the VGG network has validation accuracy of 94% whereas after training 50 epochs the resnet has only 81% validation accuracy. Among the model used the YOLO perform exceptionally well. The resnet performs worst in our case. The metrices for the model are given below:
+The dataset is avalilable <a herf="https://drive.google.com/file/d/1fUeqRT5pWOs2uQIX14u8At80hnlbqviq/view?usp=drive_link"> here </a>.
 
 ### Evaluation metrices
 
@@ -65,4 +66,5 @@ In week 4, we created the streamlit app for the document classification. For doc
 We also created the container and push it to the docker hub. The docker file can be pulled using following code:
 ```bash
 docker pull sonishmaharjan555/document_classifier:v1.4
+docker run sonishmaharjan555/document_classifier:v1.4
 ```
