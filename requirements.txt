@@ -5,3 +5,6 @@ pillow==10.2.0
 streamlit==1.30.0
 tensorflow==2.13.1
 ultralytics==8.1.2
+transformers==4.32.2
+torch==1.6.0
+torchvision==0.16.2

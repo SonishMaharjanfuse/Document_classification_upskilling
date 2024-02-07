@@ -4,6 +4,10 @@ import numpy as np
 import cv2
 import os
 from PIL import Image
+import torch
+import torchvision.transforms as transforms
+from transformers import AutoModelForImageClassification
+# from transformers import AutoFeatureExtractor
 from tensorflow.keras.models import load_model
 
 
@@ -52,7 +56,7 @@ def vgg_predict():
     Perform prediction using VGG model.
     """
     model = load_model("./Week_3/model/vgg/vgg16.keras")
-    class_names = ['citizenship', 'license', 'others', 'passport']
+    class_names = ["citizenship", "license", "others", "passport"]
     image = upload_image()
 
     # Perform prediction when the user clicks the "Predict" button
@@ -84,12 +88,47 @@ def vgg_predict():
         st.write("Predicted Probabilities:", predictions)
 
 
+def dit_predict():
+
+    # feature_extractor = AutoFeatureExtractor.from_pretrained("SonishMaharjan/ditmodel")
+    model = AutoModelForImageClassification.from_pretrained(
+        "SonishMaharjan/ditmodel")
+    class_names = ["citizenship", "license", "others", "passport"]
+    image = upload_image()
+
+    if st.button("Predict"):
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        preprocess = transforms.Compose(
+            [
+                transforms.Resize((224, 224)),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
+            ]
+        )
+        inputs = preprocess(image).unsqueeze(0)  # Add batch dimension
+
+        # Forward pass
+        with torch.no_grad():
+            outputs = model(inputs)
+            logits = outputs.logits
+
+        predicted_class_idx = logits.argmax(-1).item()
+
+        # Display the prediction results
+        st.subheader("Prediction:")
+        st.write(f"Predicted Class: {class_names[predicted_class_idx]}")
+        st.write("Predicted Probabilities:", logits[0])
+
+
 def main():
     """
     Main function to run the streamlit app.
     """
     options = st.sidebar.radio(
-        "Choose the model", ["Home", "YOLO", "VGG", "Augmentation"])
+        "Choose the model", ["Home", "YOLO", "VGG", "DiT", "Augmentation"]
+    )
 
     if options == "YOLO":
         yolo_options = st.sidebar.radio(
@@ -144,19 +183,36 @@ def main():
         if uploaded_file is not None:
             cv2_image = np.array(uploaded_file)
 
-            cv2.imwrite(os.path.join(
-                output_path, "test.jpg"), cv2_image)
+            cv2.imwrite(os.path.join(output_path, "test.jpg"), cv2_image)
 
             os.system("python3 ./Week_2/Data_augmentation.py")
 
             augmented_path = "./Week_2/augmented_data"
-            image_files = [f for f in os.listdir(
-                augmented_path) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
+            image_files = [
+                f
+                for f in os.listdir(augmented_path)
+                if f.lower().endswith((".png", ".jpg", ".jpeg"))
+            ]
             for image_file in image_files:
                 image = f"{augmented_path}/{image_file}"
                 st.image(image, caption=image_file, use_column_width=False)
 
             os.system(f"rm -rf {augmented_path} {output_path} ")
+
+    if options == "DiT":
+        yolo_options = st.sidebar.radio(
+            "Choose option", ["About model", "Prediction"])
+        if yolo_options == "About model":
+            st.markdown(
+                """
+                ### About model
+                DiT (Document Image Transformer) is a self-supervised pre-trained Document Image Transformer model using large-scale unlabeled text images for Document AI tasks, which is essential since no supervised counterparts ever exist due to the lack of human labeled document images.
+
+                The model is fine tuned on the [microsoft/dit-base](https://huggingface.co/microsoft/dit-base) model.
+                """
+            )
+        if yolo_options == "Prediction":
+            dit_predict()
 
 
 if __name__ == "__main__":
